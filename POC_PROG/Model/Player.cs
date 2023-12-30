@@ -19,6 +19,8 @@ namespace POC_PROG
             _currentCoords = currentCoords;
         }
 
+        // ACTIONS
+
         public void move(string movement)
         {
             switch (movement)
@@ -83,6 +85,11 @@ namespace POC_PROG
                     Console.Clear();
                     break;
             }
+        }
+
+        public void attack()
+        {
+            Console.WriteLine(MapManager.getRoom(_currentCoords.Item1, _currentCoords.Item2)[0]);
         }
 
 

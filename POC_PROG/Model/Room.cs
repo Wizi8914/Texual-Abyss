@@ -8,11 +8,12 @@ namespace POC_PROG.Model
 {
     class Room
     {
-        public Room(int monsterCount, int chestCount, List<int> coords)
+        public Room(int monsterCount, int chestCount, List<int> coords, bool hasExit = false)
         {
             _monsterCount = monsterCount;
             _chestCount = chestCount;
             _coords = coords;
+            _hasExit = hasExit;
         }
 
         public int getMonsterCount()
@@ -33,5 +34,6 @@ namespace POC_PROG.Model
         private int _monsterCount;
         private int _chestCount;
         private List<int> _coords;
+        private bool _hasExit;
     }
 }

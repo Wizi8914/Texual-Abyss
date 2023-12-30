@@ -43,7 +43,7 @@ namespace POC_PROG.Managers
 
             while (!win)
             {
-                mapManager.getRoomInfo(player.getCurrentCoords().Item1, player.getCurrentCoords().Item2);
+                mapManager.displayRoomInfo(player.getCurrentCoords().Item1, player.getCurrentCoords().Item2);
                 Console.WriteLine("\n\nQue faites-vous parmis les choix suivants :");
 
                 //Verification de l'input utilisateur
@@ -59,7 +59,7 @@ namespace POC_PROG.Managers
                     Console.WriteLine("2. Attaquer ?");
                     Console.WriteLine("3. Fouiller ?");
 
-                    Console.WriteLine("\nVotre choix : ");
+                    Console.WriteLine("\nQue faites-vous parmis les choix suivants :");
                     input = Console.ReadLine().ToLower().Trim(); // On récupère l'input utilisateur et on le normalise (minuscule, plus on enlève les espaces)
 
                     if (choices.Contains(input))
@@ -70,7 +70,7 @@ namespace POC_PROG.Managers
                     {
                         Console.Clear();
                         Console.WriteLine($"Veuillez entrer un choix {TextUtils.colorText("valide")} !\n");
-                        mapManager.getRoomInfo(player.getCurrentCoords().Item1, player.getCurrentCoords().Item2);
+                        mapManager.displayRoomInfo(player.getCurrentCoords().Item1, player.getCurrentCoords().Item2);
                         Console.WriteLine("\n\nQue faites-vous parmis les choix suivants :");
                     }
                 }
@@ -90,11 +90,15 @@ namespace POC_PROG.Managers
                         player.move("droite");
                         break;
                     case "fouiller":
+                        
                         break;
                     case "attaquer":
+                        player.attack();
                         break;
                 }
 
+                Console.WriteLine("dégats");
+                
                 //player.damage(5);
 
             }
@@ -102,8 +106,13 @@ namespace POC_PROG.Managers
 
         public static void Loose()
         {
-            Console.Clear();
-            Console.WriteLine(@"
+            bool valid = false;
+            string input = "";
+
+            while (!valid)
+            {
+                Console.Clear();
+                Console.WriteLine(@"
    _____          __  __ ______    ______      ________ _____    _ 
   / ____|   /\   |  \/  |  ____|  / __ \ \    / /  ____|  __ \  | |
  | |  __   /  \  | \  / | |__    | |  | \ \  / /| |__  | |__) | | |
@@ -113,12 +122,51 @@ namespace POC_PROG.Managers
 
 ===================================================================");
 
-            Console.WriteLine($"\nVotre aventure s'arrête ici {TextUtils.colorText(player.getName())} , vous avez perdu !");
-            Console.WriteLine($"Votre score final est de {TextUtils.colorText(Convert.ToString(player.getScore()))} !");
+                Console.WriteLine($"\nVotre aventure s'arrête ici {TextUtils.colorText(player.getName())} , vous avez perdu !");
+                Console.WriteLine($"Votre score final est de {TextUtils.colorText(Convert.ToString(player.getScore()))} !");
 
-            Console.WriteLine("\nAppuyez sur une touche pour quitter...");
-            ConsoleKeyInfo key = Console.ReadKey(false);
-            Environment.Exit(0);
+                Console.WriteLine("Que voulez vous faire ?");
+                Console.WriteLine("1. Recommencer");
+                Console.WriteLine("2. Quitter");
+
+                Console.WriteLine("\nQue faites-vous parmis les choix suivants :");
+
+                input = Console.ReadLine().ToLower().Trim();
+                
+                string[] choices = { "recommencer", "quitter" };
+
+                if (choices.Contains(input))
+                {
+                    valid = true;
+                }
+                else
+                {
+                    Console.Clear();
+                    Console.WriteLine($"Veuillez entrer un choix {TextUtils.colorText("valide")} !\n");
+
+
+                }
+            }
+
+            switch (input)
+            {
+                case "recommencer":
+
+                    Console.WriteLine("\nAppuyez sur une touche pour recommencer...");
+                    ConsoleKeyInfo key = Console.ReadKey(false);
+                    Console.Clear();
+
+                    GameInstance gameInstance = new GameInstance();
+                    gameInstance.Start();
+
+                    break;
+                case "quitter":
+                    Console.WriteLine("\nAppuyez sur une touche pour quitter...");
+                    key = Console.ReadKey(false);
+                    Environment.Exit(0);
+
+                    break;
+            }
         }
 
         static Player player;

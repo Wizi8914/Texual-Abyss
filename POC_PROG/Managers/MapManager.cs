@@ -17,12 +17,18 @@ namespace POC_PROG.Managers
 
         }
 
-        private static (int, int)[,] levelInfo = // chest count, monster count
+        private static (int, int)[,] levelInfo = // Monster count, Chest count
         {
             {(0, 0), (2, 0), (4, 0), (0, 0), (1, 1)},
             {(2, 2), (4, 1), (2, 0), (3, 0), (2, 0)},
             {(0, 0), (3, 0), (0, 2), (2, 1), (0, 2)},
-            {(5, 2), (4, 1), (1, 1), (2, 0), (2, 0)}
+            {(5, 2), (4, 1), (1, 1), (2, 0), (2, 0)},
+            {(0, 4), (6, 0), (3, 2), (4, 0), (0, 0)}
+        };
+
+        private static (int, int)[] exit = {
+            (1, 1),
+            (4, 4)
         };
 
 
@@ -37,17 +43,36 @@ namespace POC_PROG.Managers
                 List<Room> row = new List<Room>();
                 for (int j = 0; j < levelInfo.GetLength(1); j++)
                 {
-                    row.Add(new Room(levelInfo[i, j].Item1, levelInfo[i, j].Item2, new List<int> { i, j }));
+                    if (exit.Contains((i, j)))
+                    {
+                        row.Add(new Room(levelInfo[i, j].Item1, levelInfo[i, j].Item2, new List<int> { i, j }, true));
+                    }
+                    else
+                    {
+                        row.Add(new Room(levelInfo[i, j].Item1, levelInfo[i, j].Item2, new List<int> { i, j }));
+                    }
                 }
                 level.Add(row);
             }
         }
 
-        public void getRoomInfo(int x, int y)
+        public void displayRoomInfo(int x, int y)
         {
+            Console.WriteLine(level[0].Count());
+            Console.WriteLine(level[x][y]);
+            Console.WriteLine(x);
+            Console.WriteLine(y);
+            Console.WriteLine(level[x][y].getMonsterCount());
+
             Console.WriteLine($"Vous entrez dans la salle. Position (x: {TextUtils.colorText(x.ToString())}, y: {TextUtils.colorText(y.ToString())})");
             Console.WriteLine($"Vous voyez : {TextUtils.colorText(level[x][y].getMonsterCount().ToString())} monstre(s).");
             Console.WriteLine($"Au fond de la salle il y a {TextUtils.colorText(level[x][y].getChestCount().ToString())} trésor(s).");
+        }
+
+        public static int[] getRoom(int x, int y)
+        {
+            int[] tab = { levelInfo[x, y].Item1, levelInfo[x, y].Item2 };
+            return tab;
         }
 
         public static int[] getLevelSize()
@@ -57,6 +82,7 @@ namespace POC_PROG.Managers
         }
 
         private List<List<Room>> level = new List<List<Room>>();
+
         
     }
 
