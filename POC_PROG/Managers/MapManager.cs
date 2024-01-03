@@ -17,7 +17,13 @@ namespace POC_PROG.Managers
 
         }
 
-        private static (int, int)[,] levelInfo = // Monster count, Chest count
+
+
+        /*=====================================================
+                              LEVEL INIT
+         ====================================================*/
+
+        private static (int, int)[,] levelInfo = // Monster count, Chest count (peut être générer de façon aléatoire)
         {
             {(0, 0), (2, 0), (4, 0), (0, 0), (1, 1)},
             {(2, 2), (4, 1), (2, 0), (3, 0), (2, 0)},
@@ -26,8 +32,10 @@ namespace POC_PROG.Managers
             {(0, 4), (6, 0), (3, 2), (4, 0), (0, 0)}
         };
 
-        private static (int, int)[] exit = {
-            (1, 1),
+        private static (int, int)[] exit = { // peut être remplacer par une génération aléatoire
+            (0, 0),
+            (0, 4),
+            (4, 0),
             (4, 4)
         };
 

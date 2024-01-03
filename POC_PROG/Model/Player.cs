@@ -33,13 +33,7 @@ namespace POC_PROG
                     }
 
                     _currentCoords.Item1--;
-                    Console.WriteLine($"\nVous vous déplacez vers le {TextUtils.colorText("haut")} !");
-
-                    Console.WriteLine("\nAppuyez sur une touche pour continuer...");
-                    ConsoleKeyInfo key = Console.ReadKey(false);
-                    Console.Clear();
-
-                    GameInstance.setNextRoom(true);
+                    moveRoom($"\nVous vous déplacez vers le {TextUtils.colorText("haut")} !");
                     break;
 
                 case "bas":
@@ -50,12 +44,7 @@ namespace POC_PROG
                     }
 
                     _currentCoords.Item1++;
-                    Console.WriteLine($"\nVous vous déplacez vers le {TextUtils.colorText("bas")} !");
-                    Console.WriteLine("\nAppuyez sur une touche pour continuer...");
-                    key = Console.ReadKey(false);
-                    Console.Clear();
-
-                    GameInstance.setNextRoom(true);
+                    moveRoom($"\nVous vous déplacez vers le {TextUtils.colorText("bas")} !");
                     break;
 
                 case "gauche":
@@ -66,12 +55,7 @@ namespace POC_PROG
                     }
 
                     _currentCoords.Item2--;
-                    Console.WriteLine($"\nVous vous déplacez vers la {TextUtils.colorText("gauche")} !");
-                    Console.WriteLine("\nAppuyez sur une touche pour continuer...");
-                    key = Console.ReadKey(false);
-                    Console.Clear();
-
-                    GameInstance.setNextRoom(true);
+                    moveRoom($"\nVous vous déplacez vers la {TextUtils.colorText("gauche")} !");
                     break;
 
                 case "droite":
@@ -81,21 +65,32 @@ namespace POC_PROG
                         break;
                     }
                     _currentCoords.Item2++;
-                    Console.WriteLine($"\nVous vous déplacez vers la {TextUtils.colorText("droite")} !");
-                    Console.WriteLine("\nAppuyez sur une touche pour continuer...");
-                    key = Console.ReadKey(false);
-                    Console.Clear();
-
-                    GameInstance.setNextRoom(true);
+                    moveRoom($"\nVous vous déplacez vers la {TextUtils.colorText("droite")} !");
                     break;
+            }
+
+            void moveRoom(string message)
+            {
+                Console.WriteLine(message);
+                Console.WriteLine("\nAppuyez sur une touche pour continuer...");
+                ConsoleKeyInfo key = Console.ReadKey(false);
+                Console.Clear();
+
+                GameInstance.setNextRoom(true);
+                clearRoom = false;
             }
         }
 
         public void attack()
         {
-            Random rdm = new Random();
+            if (clearRoom)
+            {
+                GameInstance.setErrorMessage($"\nDu calme termiator ! Vous avez déjà {TextUtils.colorText("vaincu")} tout les monstres présent .\n");
+                return;
+            }
 
-            int damage = MapManager.getRoom(_currentCoords.Item1, _currentCoords.Item2)[0] / 2;
+            Random rdm = new Random();
+            int damage = (int)Math.Ceiling((double)MapManager.getRoomInstance(_currentCoords.Item1, _currentCoords.Item2).getMonsterCount() / 2);
 
             playerDamage(damage);
 
@@ -105,15 +100,30 @@ namespace POC_PROG
                 $"Vous avez prit la bonne décision ! Votre attaque a démolit le petit monstre sans défense ! [Ses potes arrivent !] vous perdez {TextUtils.colorText(damage.ToString())} point de vie ! Il vous reste {TextUtils.colorText(_currentLife.ToString())} points de vie."
             };
 
-            MapManager.killMonster(_currentCoords.Item1, _currentCoords.Item2);
+            if (MapManager.getRoom(_currentCoords.Item1, _currentCoords.Item2)[0] == 1)
+            {
+                Console.WriteLine($"Vous attaquez ! Le monstre a été désintégré par votre sainte puissance ! Mais dans sa chute il vous a mordu... vous perdez {TextUtils.colorText(damage.ToString())} points de vie !");
+            }
+
 
             Console.WriteLine("\n" + attackMessages[rdm.Next(attackMessages.Count())]);
 
-
-            Console.WriteLine($"\nIl reste encore {TextUtils.colorText(MapManager.getRoomInstance(_currentCoords.Item1, _currentCoords.Item2).getMonsterCount().ToString())} amis à lui ! Que compte tu faire ?");
-
-                        
+            if (MapManager.getRoomInstance(_currentCoords.Item1, _currentCoords.Item2).getMonsterCount()-1 == 0)
+            {
+                MapManager.killMonster(_currentCoords.Item1, _currentCoords.Item2); // On tue le dernier monstre
+                Console.WriteLine($"\nVous avez {TextUtils.colorText("vaincu")} tous les monstres de la salle ! Vous pouvez continuer votre aventure !");
+                GameInstance.setError(false);
+                clearRoom = true;
+            }
+            else
+            {
+                MapManager.killMonster(_currentCoords.Item1, _currentCoords.Item2);
+                Console.WriteLine($"\nIl reste encore {TextUtils.colorText(MapManager.getRoomInstance(_currentCoords.Item1, _currentCoords.Item2).getMonsterCount().ToString())} amis à lui ! Que compte tu faire ?");
+                GameInstance.setError(false);
+            }           
         }
+
+        private bool clearRoom = false;
 
 
         // GETTERS
@@ -139,7 +149,7 @@ namespace POC_PROG
         }
 
         // SETTERS
-        public void playerDamage(int damage = 1)
+        public void playerDamage(int damage)
         {
             _currentLife -= damage;
 
@@ -149,7 +159,7 @@ namespace POC_PROG
             }
         }
 
-        public void heal(int heal = 1)
+        public void heal(int heal)
         {
             _currentLife += heal;
         }

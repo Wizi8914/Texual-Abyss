@@ -154,7 +154,7 @@ namespace POC_PROG.Managers
 
 ===================================================================");
 
-                Console.WriteLine($"\nVotre aventure s'arrête ici {TextUtils.colorText(player.getName())} , vous avez perdu !");
+                Console.WriteLine($"\nVotre aventure s'arrête ici {TextUtils.colorText(player.getName())}, vous avez perdu !");
                 Console.WriteLine($"Votre score final est de {TextUtils.colorText(Convert.ToString(player.getScore()))} !");
 
                 Console.WriteLine("\nQue voulez vous faire ?");
@@ -210,6 +210,12 @@ namespace POC_PROG.Managers
         {
             error = true;
             errorMessage = message;
+        }
+
+        public static void setError(bool err)
+        {
+            error = err;
+            alreadyErrorMessage = err;
         }
 
         public static void setNextRoom(bool value)
