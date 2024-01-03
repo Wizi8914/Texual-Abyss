@@ -87,6 +87,11 @@ namespace POC_PROG.Managers
             level[x][y].killMonster();
         }
 
+        public static void openChest(int x, int y)
+        {
+            level[x][y].openChest();
+        }
+
         public static int[] getLevelSize()
         {
             int[] tab = { levelInfo.GetLength(0), levelInfo.GetLength(1) };

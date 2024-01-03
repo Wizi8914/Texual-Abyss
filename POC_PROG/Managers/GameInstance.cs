@@ -74,7 +74,19 @@ namespace POC_PROG.Managers
                         player.move("droite");
                         break;
                     case "fouiller":
-                        
+                        if (MapManager.getRoom(player.getCurrentCoords().Item1, player.getCurrentCoords().Item2)[1] == 0)
+                        {
+                            setErrorMessage($"\nVous avez fouillé dans le vide... Il n'y a pas de coffre {TextUtils.colorText("coffre")} ici !\n");
+                            break;
+                        }
+                        if (MapManager.getRoomInstance(player.getCurrentCoords().Item1, player.getCurrentCoords().Item2).getMonsterCount() > 0)
+                        {
+                            setErrorMessage($"\nIl y a encore {TextUtils.colorText(MapManager.getRoomInstance(player.getCurrentCoords().Item1, player.getCurrentCoords().Item2).getMonsterCount().ToString())} dans la salle ! Exterminer les avant de pouvoir ouvrir les coffres.\n");
+                            break;
+                        }
+
+                        player.openChest();
+
                         break;
                     case "attaquer":
                         if (MapManager.getRoom(player.getCurrentCoords().Item1, player.getCurrentCoords().Item2)[0] == 0)

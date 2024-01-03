@@ -77,13 +77,13 @@ namespace POC_PROG
                 Console.Clear();
 
                 GameInstance.setNextRoom(true);
-                clearRoom = false;
+                clearRoomMonster = false;
             }
         }
 
         public void attack()
         {
-            if (clearRoom)
+            if (clearRoomMonster)
             {
                 GameInstance.setErrorMessage($"\nDu calme termiator ! Vous avez déjà {TextUtils.colorText("vaincu")} tout les monstres présent .\n");
                 return;
@@ -113,7 +113,7 @@ namespace POC_PROG
                 MapManager.killMonster(_currentCoords.Item1, _currentCoords.Item2); // On tue le dernier monstre
                 Console.WriteLine($"\nVous avez {TextUtils.colorText("vaincu")} tous les monstres de la salle ! Vous pouvez continuer votre aventure !");
                 GameInstance.setError(false);
-                clearRoom = true;
+                clearRoomMonster = true;
             }
             else
             {
@@ -123,8 +123,78 @@ namespace POC_PROG
             }           
         }
 
-        private bool clearRoom = false;
+        private bool clearRoomMonster = false;
 
+
+        public void openChest()
+        {
+            if(clearRoomChest)
+            {
+                GameInstance.setErrorMessage($"\nPlus de {TextUtils.colorText("coffres")} à l'horizon. Vous les avez tous trouvés !\n");
+                return;
+            }
+
+            Console.WriteLine("\nVous ouvrez le coffre...");
+            
+            Random rdm = new Random();
+            int hp = rdm.Next(0, 6);
+
+            string[] noChestText = { // Merci ChatGPT pour ces phrases
+                "Coffre vide. Apparemment, quelqu'un a confondu 'butin' avec 'chasse aux fantômes'.",
+                "Vous ouvrez le coffre, mais il semble que le trésor ait pris des vacances. Rien à voir ici !",
+                "Rien dans le coffre. Même les araignées l'ont abandonné, préférant les coins moins ennuyeux.",
+                "Vous découvrez un coffre sans trésor, la honte des coffres",
+                "Le coffre est vide, mais votre imagination est pleine de trésors. Lequel préférez-vous ?",
+                "Aucun trésor ici, mais peut-être que le véritable trésor était l'amitié que vous avez développée avec le coffre.",
+                "Vous espériez de l'or, mais ce coffre est tellement vide qu'il en devient économe.",
+            };
+
+            heal(hp); // On heal le joueur
+
+            switch (hp)
+            {
+                case 0:
+                    Console.WriteLine($"\n{noChestText[new Random().Next(noChestText.Length)]}");
+                    break;
+                case 1:
+                    Console.WriteLine($"\nVous avez trouvé un vieux bout de pain ! Vous le mangez et regagnez {TextUtils.colorText("1")} point de vie ! Vous avez désormais {TextUtils.colorText(_currentLife.ToString())} points de vie.");
+                    break;
+                case 2:
+                    Console.WriteLine($"\nVous avez trouvé une pomme ! Vous la mangez et regagnez {TextUtils.colorText("2")} points de vie ! Vous avez désormais {TextUtils.colorText(_currentLife.ToString())} points de vie.");
+                    break;
+                case 3:
+                    Console.WriteLine($"\nVous découvrez une potion de soin ! En la buvant, vous regagnez {TextUtils.colorText("3")} points de vie ! Vous avez désormais {TextUtils.colorText(_currentLife.ToString())} points de vie.");
+                    break;
+                case 4:
+                    Console.WriteLine($"\nVous mettez la main sur une potion de soin de qualité supérieure ! Sa consommation vous redonne {TextUtils.colorText("4")} points de vie ! Vous avez désormais {TextUtils.colorText(_currentLife.ToString())} points de vie.");
+                    break;
+                case 5:
+                    Console.WriteLine($"\nVous trouvez une potion de soin puissante ! Elle vous restaure {TextUtils.colorText("5")} points de vie et revitalise votre énergie ! Vous avez désormais {TextUtils.colorText(_currentLife.ToString())} points de vie.");
+                    break;
+            }
+
+
+            int score = 10;
+            _stats.addScore(score);
+
+            MapManager.openChest(_currentCoords.Item1, _currentCoords.Item2);
+
+            Console.WriteLine($"\nVous avez gagné {TextUtils.colorText(score.ToString())} points, ils sont ajoutés à votre score ! Vous pourrez aller le raconter à votre maman une fois sortie d'ici ! Votre score est maintenant de {TextUtils.colorText(_stats.getScore().ToString())}.");
+            
+            if (MapManager.getRoomInstance(_currentCoords.Item1, _currentCoords.Item2).getChestCount() == 0)
+            {
+                Console.WriteLine($"\nIl semblerait que vous ayez décidé de faire une tournée mondiale des coffres ! Félicitations, vous avez désormais un doctorat en ouverture de {TextUtils.colorText("coffres")}. Vous avez le choix de changer de salle. Oui, il y a d'autres salles. Incroyable, non ?");
+                GameInstance.setError(false);
+                clearRoomChest = true;
+            }
+            else
+            {
+                Console.WriteLine($"\nIl s'emblerais qu'il reste encore {TextUtils.colorText(MapManager.getRoomInstance(_currentCoords.Item1, _currentCoords.Item2).getChestCount().ToString())} coffre a ouvrir !");
+                GameInstance.setError(false);
+            }
+        }
+
+        private bool clearRoomChest = false;
 
         // GETTERS
 

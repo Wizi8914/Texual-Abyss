@@ -31,6 +31,11 @@ namespace POC_PROG.Model
             return _coords;
         }
 
+        public void openChest()
+        {
+            _chestCount--;
+        }
+
         public void killMonster()
         {
             _monsterCount--;

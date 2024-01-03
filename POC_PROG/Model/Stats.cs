@@ -25,6 +25,10 @@ namespace POC_PROG
             return _score;
         }
 
+        public void addScore(int score)
+        {
+            _score += score;
+        }
 
         private int _life;
         private int _score;
