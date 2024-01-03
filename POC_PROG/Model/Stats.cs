@@ -12,7 +12,6 @@ namespace POC_PROG
         {
             _life = life;
             _score = score;
-
         }
 
         public int getLife()

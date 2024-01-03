@@ -25,9 +25,7 @@ namespace TextualAbyss
             Console.Clear();
             GameInstance instance = new GameInstance();
 
-
             instance.Start();
-
         }
     }
 }

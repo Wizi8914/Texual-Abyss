@@ -11,13 +11,10 @@ namespace POC_PROG.Managers
 {
     class MapManager
     {
-
         public MapManager()
         {
 
         }
-
-
 
         /*=====================================================
                               LEVEL INIT
@@ -33,12 +30,8 @@ namespace POC_PROG.Managers
         };
 
         private static (int, int)[] exit = { // peut être remplacer par une génération aléatoire
-            (0, 0),
-            (0, 4),
-            (4, 0),
             (4, 4)
         };
-
 
         /*=====================================================
                             ROOMS INIT
@@ -99,10 +92,5 @@ namespace POC_PROG.Managers
         }
 
         private static List<List<Room>> level = new List<List<Room>>();
-
-        
     }
-
-
-
 }

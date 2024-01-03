@@ -125,7 +125,6 @@ namespace POC_PROG
 
         private bool clearRoomMonster = false;
 
-
         public void openChest()
         {
             if(clearRoomChest)
@@ -233,7 +232,6 @@ namespace POC_PROG
         {
             _currentLife += heal;
         }
-
 
         private string _name;
         private int _currentLife;

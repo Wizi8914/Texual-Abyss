@@ -41,6 +41,10 @@ namespace POC_PROG.Model
             _monsterCount--;
         }
 
+        public bool hasExit()
+        {
+            return _hasExit;
+        }
 
         private int _monsterCount;
         private int _chestCount;

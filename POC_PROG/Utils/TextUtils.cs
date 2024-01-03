@@ -8,7 +8,6 @@ namespace POC_PROG.Utils
 {
     class TextUtils
     {
-
         public TextUtils()
         {
 
@@ -25,7 +24,6 @@ namespace POC_PROG.Utils
 
         public static string colorText(string text)
         {
-
             return $"\x1b[91m{text}\x1b[39m"; // Red Color Text
         }
     }

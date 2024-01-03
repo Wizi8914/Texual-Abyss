@@ -87,8 +87,81 @@ namespace POC_PROG.Managers
 
                         player.openChest();
 
+                        // Win condition
+
+                        if (MapManager.getRoomInstance(player.getCurrentCoords().Item1, player.getCurrentCoords().Item2).hasExit() &&
+                            MapManager.getRoomInstance(player.getCurrentCoords().Item1, player.getCurrentCoords().Item2).getChestCount() == 0 &&
+                            MapManager.getRoomInstance(player.getCurrentCoords().Item1, player.getCurrentCoords().Item2).getMonsterCount() == 0)
+                        {
+                            bool valid = false;
+                            string input = "";
+                            string exitErrorMessage = "";
+                            bool alreadyExitErrorMessage = false;
+                            bool exitError = false;
+
+                            Console.WriteLine($"\nVous avez trouvé la {TextUtils.colorText("sortie")} ! Voulez-vous l'emprunter ? (Oui/Non)");
+                            choices = new List<string> { "sortir", "explorer" };
+
+
+                            while (!valid)
+                            {
+                                if (exitError)
+                                {
+                                    if (alreadyExitErrorMessage)
+                                    {
+                                        TextUtils.clearConsoleLine(11); // Clear les derniers messages + le message d'erreur pour en afficher un nouveau
+                                    }
+                                    else
+                                    {
+                                        TextUtils.clearConsoleLine(8);
+                                        alreadyExitErrorMessage = true;
+                                    }
+                                }
+
+                                Console.WriteLine("\n\nQue faites-vous parmis les choix suivants :");
+
+                                if (exitError)
+                                {
+                                    Console.WriteLine(exitErrorMessage);
+                                }
+
+                                Console.WriteLine("1. Sortir ?");
+                                Console.WriteLine("2. Explorer ?");
+
+                                Console.WriteLine("\nChoix :");
+                                input = Console.ReadLine().ToLower().Trim();
+
+                                if (choices.Contains(input))
+                                {
+                                    valid = true;
+                                }
+                                else
+                                {
+                                    exitErrorMessage = $"\nVeuillez entrer un choix {TextUtils.colorText("valide")} !\n";
+                                    exitError = true;
+                                    alreadyExitErrorMessage = true;
+                                }
+                            }
+
+                            switch (input)
+                            {
+                                case "sortir":
+                                    win = true;
+                                    break;
+                                case "explorer":
+                                    break;
+                            }
+                        }
+
                         break;
                     case "attaquer":
+
+                        if (MapManager.getRoomInstance(player.getCurrentCoords().Item1, player.getCurrentCoords().Item2).getMonsterCount() == 0 && MapManager.getRoom(player.getCurrentCoords().Item1, player.getCurrentCoords().Item2)[0] > 0)
+                        {
+                            setErrorMessage($"\nDu calme termiator ! Vous avez déjà {TextUtils.colorText("vaincu")} tout les monstres présent .\n");
+                            break;
+                        }
+
                         if (MapManager.getRoom(player.getCurrentCoords().Item1, player.getCurrentCoords().Item2)[0] == 0)
                         {
                             setErrorMessage($"\nVous avez attaqué dans le vide... Il n'y pas de monstre {TextUtils.colorText("monstre")} ici !\n");
@@ -98,6 +171,7 @@ namespace POC_PROG.Managers
                         break;
                 }
             }
+            Win(); // Affiche l'écran de victoire
         }
 
         public static string getChoice(List<string> choices)
@@ -146,6 +220,75 @@ namespace POC_PROG.Managers
 
             return input;
         }   
+
+        private static void Win()
+        {
+            bool valid = false;
+            bool error = false;
+            string input = "";
+
+            while (!valid)
+            {
+                Console.Clear();
+                Console.WriteLine(@"
+ __     ______  _    _  __          _______ _   _   _ 
+ \ \   / / __ \| |  | | \ \        / /_   _| \ | | | |
+  \ \_/ / |  | | |  | |  \ \  /\  / /  | | |  \| | | |
+   \   /| |  | | |  | |   \ \/  \/ /   | | | . ` | | |
+    | | | |__| | |__| |    \  /\  /   _| |_| |\  | |_|
+    |_|  \____/ \____/      \/  \/   |_____|_| \_| (_)
+                                                      
+======================================================");
+
+                Console.WriteLine($"\nBravo {TextUtils.colorText(player.getName())}, vous vous êtes échaper des {TextUtils.colorText("Abyss")} vous allez pouvoir retrouver votre maman !");
+                Console.WriteLine($"Votre score final est de {TextUtils.colorText(Convert.ToString(player.getScore()))} !");
+
+                Console.WriteLine("\nQue voulez vous faire ?");
+
+                if (error)
+                {
+                    Console.WriteLine($"\nVeuillez entrer un choix {TextUtils.colorText("valide")} !\n");
+                }
+
+                Console.WriteLine("1. Recommencer");
+                Console.WriteLine("2. Quitter");
+
+                Console.WriteLine("\nQue faites-vous parmis les choix suivants :");
+
+                input = Console.ReadLine().ToLower().Trim();
+
+                string[] choices = { "recommencer", "quitter" };
+
+                if (choices.Contains(input))
+                {
+                    valid = true;
+                }
+                else
+                {
+                    error = true;
+                }
+            }
+
+            switch (input)
+            {
+                case "recommencer":
+
+                    Console.WriteLine("\nAppuyez sur une touche pour recommencer...");
+                    ConsoleKeyInfo key = Console.ReadKey(false);
+                    Console.Clear();
+
+                    GameInstance gameInstance = new GameInstance();
+                    gameInstance.Start();
+
+                    break;
+                case "quitter":
+                    Console.WriteLine("\nAppuyez sur une touche pour quitter...");
+                    key = Console.ReadKey(false);
+                    Environment.Exit(0);
+
+                    break;
+            }
+        }
 
         public static void Loose()
         {
