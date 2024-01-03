@@ -14,6 +14,15 @@ namespace POC_PROG.Utils
 
         }
 
+        public static void clearConsoleLine(int lines)
+        {
+            for (int i = 0; i < lines; i++)
+            {
+                Console.SetCursorPosition(0, Console.CursorTop - 1);
+                Console.Write(new string(' ', Console.WindowWidth)); // Efface la ligne
+            }
+        }
+
         public static string colorText(string text)
         {
 

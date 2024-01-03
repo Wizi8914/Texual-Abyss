@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Numerics;
 using System.Runtime.CompilerServices;
+using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Threading.Tasks;
 using POC_PROG.Utils;
@@ -41,41 +42,24 @@ namespace POC_PROG.Managers
 
             Console.Clear();
 
+            mapManager.displayRoomInfo(player.getCurrentCoords().Item1, player.getCurrentCoords().Item2);
+
+
+            // Boucle principale du jeu
             while (!win)
             {
-                mapManager.displayRoomInfo(player.getCurrentCoords().Item1, player.getCurrentCoords().Item2);
-                Console.WriteLine("\n\nQue faites-vous parmis les choix suivants :");
+                if (nextRoom) // Envoi le message si le joueur change de salle
+                {
+                    mapManager.displayRoomInfo(player.getCurrentCoords().Item1, player.getCurrentCoords().Item2);
+                }
+
+                nextRoom = false;
 
                 //Verification de l'input utilisateur
 
                 List<string> choices = new List<string> { "haut", "bas", "gauche", "droite", "fouiller", "attaquer" };
 
-                bool valid = false;
-                string input = "";
-
-                while (!valid)
-                {
-                    Console.WriteLine("1. Se déplacer (haut, bas, gauche, droite) ?");
-                    Console.WriteLine("2. Attaquer ?");
-                    Console.WriteLine("3. Fouiller ?");
-
-                    Console.WriteLine("\nQue faites-vous parmis les choix suivants :");
-                    input = Console.ReadLine().ToLower().Trim(); // On récupère l'input utilisateur et on le normalise (minuscule, plus on enlève les espaces)
-
-                    if (choices.Contains(input))
-                    {
-                        valid = true;
-                    }
-                    else
-                    {
-                        Console.Clear();
-                        Console.WriteLine($"Veuillez entrer un choix {TextUtils.colorText("valide")} !\n");
-                        mapManager.displayRoomInfo(player.getCurrentCoords().Item1, player.getCurrentCoords().Item2);
-                        Console.WriteLine("\n\nQue faites-vous parmis les choix suivants :");
-                    }
-                }
-
-                switch (input)
+                switch (getChoice(choices))
                 {
                     case "haut":
                         player.move("haut");
@@ -93,20 +77,68 @@ namespace POC_PROG.Managers
                         
                         break;
                     case "attaquer":
+                        if (MapManager.getRoom(player.getCurrentCoords().Item1, player.getCurrentCoords().Item2)[0] == 0)
+                        {
+                            setErrorMessage($"\nVous avez attaqué dans le vide... Il n'y pas de monstre {TextUtils.colorText("monstre")} ici !\n");
+                            break;
+                        }
                         player.attack();
                         break;
                 }
-
-                Console.WriteLine("dégats");
-                
-                //player.damage(5);
-
             }
         }
+
+        public static string getChoice(List<string> choices)
+        {
+            string input = "";
+            bool valid = false;
+
+            while (!valid)
+            {
+                if (error)
+                {
+                    if (alreadyErrorMessage)
+                    {
+                        TextUtils.clearConsoleLine(12); // Clear les derniers messages + le message d'erreur pour en afficher un nouveau
+                    }
+                    else
+                    {
+                        TextUtils.clearConsoleLine(9);
+                        alreadyErrorMessage = true;
+                    }
+                }
+
+                Console.WriteLine("\n\nQue faites-vous parmis les choix suivants :");
+
+                if (error)
+                {
+                    Console.WriteLine(errorMessage);
+                }
+
+                Console.WriteLine("1. Se déplacer (haut, bas, gauche, droite) ?");
+                Console.WriteLine("2. Attaquer ?");
+                Console.WriteLine("3. Fouiller ?");
+
+                Console.WriteLine("\nChoix :");
+                input = Console.ReadLine().ToLower().Trim(); // On récupère l'input utilisateur et on le normalise (minuscule, plus on enlève les espaces)
+
+                if (choices.Contains(input))
+                {
+                    valid = true;
+                }
+                else
+                {
+                    setErrorMessage($"\nVeuillez entrer un choix {TextUtils.colorText("valide")} !\n");
+                }
+            }
+
+            return input;
+        }   
 
         public static void Loose()
         {
             bool valid = false;
+            bool error = false;
             string input = "";
 
             while (!valid)
@@ -125,7 +157,13 @@ namespace POC_PROG.Managers
                 Console.WriteLine($"\nVotre aventure s'arrête ici {TextUtils.colorText(player.getName())} , vous avez perdu !");
                 Console.WriteLine($"Votre score final est de {TextUtils.colorText(Convert.ToString(player.getScore()))} !");
 
-                Console.WriteLine("Que voulez vous faire ?");
+                Console.WriteLine("\nQue voulez vous faire ?");
+
+                if (error)
+                {
+                    Console.WriteLine($"\nVeuillez entrer un choix {TextUtils.colorText("valide")} !\n");
+                }
+
                 Console.WriteLine("1. Recommencer");
                 Console.WriteLine("2. Quitter");
 
@@ -141,10 +179,7 @@ namespace POC_PROG.Managers
                 }
                 else
                 {
-                    Console.Clear();
-                    Console.WriteLine($"Veuillez entrer un choix {TextUtils.colorText("valide")} !\n");
-
-
+                    error = true;
                 }
             }
 
@@ -169,6 +204,26 @@ namespace POC_PROG.Managers
             }
         }
 
+        // Getters & Setters
+
+        public static void setErrorMessage(string message)
+        {
+            error = true;
+            errorMessage = message;
+        }
+
+        public static void setNextRoom(bool value)
+        {
+            nextRoom = value;
+            error = false;
+            alreadyErrorMessage = false;
+        }
+
         static Player player;
+
+        private static bool nextRoom = false;
+        private static bool error = false;
+        private static string errorMessage = "";
+        private static bool alreadyErrorMessage = false;
     }
 }

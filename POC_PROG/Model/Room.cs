@@ -26,10 +26,16 @@ namespace POC_PROG.Model
             return _chestCount;
         }
 
-       public List<int> getCoords()
+        public List<int> getCoords()
         {
             return _coords;
         }
+
+        public void killMonster()
+        {
+            _monsterCount--;
+        }
+
 
         private int _monsterCount;
         private int _chestCount;

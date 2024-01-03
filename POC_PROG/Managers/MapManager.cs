@@ -58,12 +58,6 @@ namespace POC_PROG.Managers
 
         public void displayRoomInfo(int x, int y)
         {
-            Console.WriteLine(level[0].Count());
-            Console.WriteLine(level[x][y]);
-            Console.WriteLine(x);
-            Console.WriteLine(y);
-            Console.WriteLine(level[x][y].getMonsterCount());
-
             Console.WriteLine($"Vous entrez dans la salle. Position (x: {TextUtils.colorText(x.ToString())}, y: {TextUtils.colorText(y.ToString())})");
             Console.WriteLine($"Vous voyez : {TextUtils.colorText(level[x][y].getMonsterCount().ToString())} monstre(s).");
             Console.WriteLine($"Au fond de la salle il y a {TextUtils.colorText(level[x][y].getChestCount().ToString())} trésor(s).");
@@ -75,13 +69,23 @@ namespace POC_PROG.Managers
             return tab;
         }
 
+        public static Room getRoomInstance(int x, int y)
+        {
+            return level[x][y];
+        }
+
+        public static void killMonster(int x, int y)
+        {
+            level[x][y].killMonster();
+        }
+
         public static int[] getLevelSize()
         {
             int[] tab = { levelInfo.GetLength(0), levelInfo.GetLength(1) };
             return tab;
         }
 
-        private List<List<Room>> level = new List<List<Room>>();
+        private static List<List<Room>> level = new List<List<Room>>();
 
         
     }
