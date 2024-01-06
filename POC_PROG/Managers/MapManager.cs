@@ -30,7 +30,7 @@ namespace POC_PROG.Managers
         };
 
         private static (int, int)[] exit = { // peut être remplacer par une génération aléatoire
-            (4, 4)
+            (4, 4),
         };
 
         /*=====================================================

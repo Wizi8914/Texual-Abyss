@@ -74,7 +74,7 @@ namespace POC_PROG.Managers
                         player.move("droite");
                         break;
                     case "fouiller":
-                        if (MapManager.getRoom(player.getCurrentCoords().Item1, player.getCurrentCoords().Item2)[1] == 0)
+                        if (MapManager.getRoom(player.getCurrentCoords().Item1, player.getCurrentCoords().Item2)[1] == 0 && !MapManager.getRoomInstance(player.getCurrentCoords().Item1, player.getCurrentCoords().Item2).hasExit())
                         {
                             setErrorMessage($"\nVous avez fouillé dans le vide... Il n'y a pas de coffre {TextUtils.colorText("coffre")} ici !\n");
                             break;
@@ -85,7 +85,10 @@ namespace POC_PROG.Managers
                             break;
                         }
 
-                        player.openChest();
+                        if (MapManager.getRoom(player.getCurrentCoords().Item1, player.getCurrentCoords().Item2)[1] > 0) // Lancer la condition de victoire lors de la fouille même si la salle est vide
+                        {
+                            player.openChest();
+                        }
 
                         // Win condition
 
@@ -139,7 +142,6 @@ namespace POC_PROG.Managers
                                 {
                                     exitErrorMessage = $"\nVeuillez entrer un choix {TextUtils.colorText("valide")} !\n";
                                     exitError = true;
-                                    alreadyExitErrorMessage = true;
                                 }
                             }
 
