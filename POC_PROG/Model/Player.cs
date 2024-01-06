@@ -85,7 +85,7 @@ namespace POC_PROG
         {
             if (clearRoomMonster)
             {
-                GameInstance.setErrorMessage($"\nDu calme termiator ! Vous avez déjà {TextUtils.colorText("vaincu")} tout les monstres présent .\n");
+                GameInstance.setErrorMessage($"\nDu calme termiator ! Vous avez déjà {TextUtils.colorText("vaincu")} tout les monstres présents.\n");
                 return;
             }
 
@@ -96,15 +96,14 @@ namespace POC_PROG
 
             List<string> attackMessages = new List<string>
             {
-                $"Vous attaquez ! Le monstre a été désintégré par votre sainte puissance ! [Mais ses camarades se vengent...] vous perdez {TextUtils.colorText(damage.ToString())} points de vie ! Il vous reste {TextUtils.colorText(_currentLife.ToString())} points de vie.",
-                $"Vous avez prit la bonne décision ! Votre attaque a démolit le petit monstre sans défense ! [Ses potes arrivent !] vous perdez {TextUtils.colorText(damage.ToString())} point de vie ! Il vous reste {TextUtils.colorText(_currentLife.ToString())} points de vie."
+                "Vous attaquez ! Le monstre a été désintégré par votre sainte puissance ! " + ((MapManager.getRoomInstance(_currentCoords.Item1, _currentCoords.Item2).getMonsterCount() > 1) ? "Mais ses camarades se vengent... " : "") + $"Vous perdez {TextUtils.colorText(damage.ToString())} points de vie ! Il vous reste {TextUtils.colorText(_currentLife.ToString())} points de vie.",
+                "Vous avez prit la bonne décision ! Votre attaque a démolit le petit monstre sans défense ! " + ((MapManager.getRoomInstance(_currentCoords.Item1, _currentCoords.Item2).getMonsterCount() > 1) ? "Ses potes arrivent ! " : "") + $"Vous perdez {TextUtils.colorText(damage.ToString())} point de vie ! Il vous reste {TextUtils.colorText(_currentLife.ToString())} points de vie."
             };
 
             if (MapManager.getRoom(_currentCoords.Item1, _currentCoords.Item2)[0] == 1)
             {
                 Console.WriteLine($"Vous attaquez ! Le monstre a été désintégré par votre sainte puissance ! Mais dans sa chute il vous a mordu... vous perdez {TextUtils.colorText(damage.ToString())} points de vie !");
             }
-
 
             Console.WriteLine("\n" + attackMessages[rdm.Next(attackMessages.Count())]);
 
@@ -138,7 +137,7 @@ namespace POC_PROG
             Random rdm = new Random();
             int hp = rdm.Next(0, 6);
 
-            string[] noChestText = { // Merci ChatGPT pour ces phrases
+            string[] noChestText = {
                 "Coffre vide. Apparemment, quelqu'un a confondu 'butin' avec 'chasse aux fantômes'.",
                 "Vous ouvrez le coffre, mais il semble que le trésor ait pris des vacances. Rien à voir ici !",
                 "Rien dans le coffre. Même les araignées l'ont abandonné, préférant les coins moins ennuyeux.",
@@ -188,7 +187,7 @@ namespace POC_PROG
             }
             else
             {
-                Console.WriteLine($"\nIl s'emblerais qu'il reste encore {TextUtils.colorText(MapManager.getRoomInstance(_currentCoords.Item1, _currentCoords.Item2).getChestCount().ToString())} coffre a ouvrir !");
+                Console.WriteLine($"\nIl semblerais qu'il reste encore {TextUtils.colorText(MapManager.getRoomInstance(_currentCoords.Item1, _currentCoords.Item2).getChestCount().ToString())} coffre a ouvrir !");
                 GameInstance.setError(false);
             }
         }

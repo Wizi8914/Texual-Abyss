@@ -26,7 +26,7 @@ namespace POC_PROG.Managers
             MapManager mapManager = new MapManager();
             mapManager.createRooms();
 
-            Console.WriteLine($"Bienvenue sur {TextUtils.colorText("Textual Abyss")}, veuillez entrée votre {TextUtils.colorText("pseudonyme")}");
+            Console.WriteLine($"Bienvenue sur {TextUtils.colorText("Textual Abyss")}, veuillez entrer votre {TextUtils.colorText("pseudonyme")}");
             Console.WriteLine("\nPseudo : ");
 
             string name = Console.ReadLine();
@@ -35,7 +35,7 @@ namespace POC_PROG.Managers
 
             Console.Clear();
             Console.WriteLine("Bienvenue " + TextUtils.colorText(player.getName()) + " !");
-            Console.WriteLine($"Vous commencer votre aventure avec {TextUtils.colorText(Convert.ToString(player.getLife()))} de vitalité ! Cependant votre score est à {TextUtils.colorText(Convert.ToString(player.getScore()))} ...");
+            Console.WriteLine($"Vous commencez votre aventure avec {TextUtils.colorText(Convert.ToString(player.getLife()))} de vitalité ! Cependant votre score est à {TextUtils.colorText(Convert.ToString(player.getScore()))} ...");
 
             Console.WriteLine("\nAppuyez sur une touche pour continuer...");
             ConsoleKeyInfo key = Console.ReadKey(false);
@@ -81,7 +81,7 @@ namespace POC_PROG.Managers
                         }
                         if (MapManager.getRoomInstance(player.getCurrentCoords().Item1, player.getCurrentCoords().Item2).getMonsterCount() > 0)
                         {
-                            setErrorMessage($"\nIl y a encore {TextUtils.colorText(MapManager.getRoomInstance(player.getCurrentCoords().Item1, player.getCurrentCoords().Item2).getMonsterCount().ToString())} dans la salle ! Exterminer les avant de pouvoir ouvrir les coffres.\n");
+                            setErrorMessage($"\nIl y a encore {TextUtils.colorText(MapManager.getRoomInstance(player.getCurrentCoords().Item1, player.getCurrentCoords().Item2).getMonsterCount().ToString())} dans la salle ! Exterminez les avant de pouvoir ouvrir les coffres.\n");
                             break;
                         }
 
@@ -240,7 +240,7 @@ namespace POC_PROG.Managers
                                                       
 ======================================================");
 
-                Console.WriteLine($"\nBravo {TextUtils.colorText(player.getName())}, vous vous êtes échaper des {TextUtils.colorText("Abyss")} vous allez pouvoir retrouver votre maman !");
+                Console.WriteLine($"\nBravo {TextUtils.colorText(player.getName())}, vous vous êtes échappé des {TextUtils.colorText("Abyss")} vous allez pouvoir retrouver votre maman !");
                 Console.WriteLine($"Votre score final est de {TextUtils.colorText(Convert.ToString(player.getScore()))} !");
 
                 Console.WriteLine("\nQue voulez vous faire ?");
