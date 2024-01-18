@@ -20,7 +20,7 @@ namespace TextualAbyss
 ===================================================================");
 
             Console.WriteLine("\nAppuyez sur une touche pour continuer...");
-            ConsoleKeyInfo key = Console.ReadKey(false);
+            Console.ReadKey(false);
 
             Console.Clear();
             GameInstance instance = new GameInstance();

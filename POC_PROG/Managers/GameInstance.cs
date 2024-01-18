@@ -38,7 +38,7 @@ namespace POC_PROG.Managers
             Console.WriteLine($"Vous commencez votre aventure avec {TextUtils.colorText(Convert.ToString(player.getLife()))} de vitalité ! Cependant votre score est à {TextUtils.colorText(Convert.ToString(player.getScore()))} ...");
 
             Console.WriteLine("\nAppuyez sur une touche pour continuer...");
-            ConsoleKeyInfo key = Console.ReadKey(false);
+            Console.ReadKey(false);     
 
             Console.Clear();
 
@@ -276,7 +276,7 @@ namespace POC_PROG.Managers
                 case "recommencer":
 
                     Console.WriteLine("\nAppuyez sur une touche pour recommencer...");
-                    ConsoleKeyInfo key = Console.ReadKey(false);
+                    Console.ReadKey(false);
                     Console.Clear();
 
                     GameInstance gameInstance = new GameInstance();
@@ -285,7 +285,7 @@ namespace POC_PROG.Managers
                     break;
                 case "quitter":
                     Console.WriteLine("\nAppuyez sur une touche pour quitter...");
-                    key = Console.ReadKey(false);
+                    Console.ReadKey(false);
                     Environment.Exit(0);
 
                     break;
@@ -345,7 +345,7 @@ namespace POC_PROG.Managers
                 case "recommencer":
 
                     Console.WriteLine("\nAppuyez sur une touche pour recommencer...");
-                    ConsoleKeyInfo key = Console.ReadKey(false);
+                    Console.ReadKey(false);
                     Console.Clear();
 
                     GameInstance gameInstance = new GameInstance();
@@ -354,7 +354,7 @@ namespace POC_PROG.Managers
                     break;
                 case "quitter":
                     Console.WriteLine("\nAppuyez sur une touche pour quitter...");
-                    key = Console.ReadKey(false);
+                    Console.ReadKey(false);
                     Environment.Exit(0);
 
                     break;

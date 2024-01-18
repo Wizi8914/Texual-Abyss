@@ -73,7 +73,7 @@ namespace POC_PROG
             {
                 Console.WriteLine(message);
                 Console.WriteLine("\nAppuyez sur une touche pour continuer...");
-                ConsoleKeyInfo key = Console.ReadKey(false);
+                Console.ReadKey(false);
                 Console.Clear();
 
                 GameInstance.setNextRoom(true);
